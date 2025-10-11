@@ -5,24 +5,26 @@
 #include <random>
 #include <vector>
 #include <string>
+//#include "Functions.cpp" :(
 
 
-int x{};//used to select the actions
-bool repeted{false};
+int UserChoice{};//used to select the actions
+bool repeated{false};// Boolean for when the user enters an incorrect input.
 
 //Global variables^^
 
 int ideaCommittor() {
-    repeted = false;//As they use the same variable, we need to reset it as this is a new function. 
-    std::cout << "Welcome to the ideaCommittor(tm)!\n what would you like to do?" << std::endl;
+    repeated = false;//As they use the same variable, we need to reset it as this is a new function. 
+    std::cout << "Welcome to the ideaCommittor(tm)!\nWhat would you like to do?" << std::endl;
     std::cout << "1) Add Idea" << std::endl;
     std::cout << "2) Remove Idea" << std::endl;
     std::cout << "3) Exit" << std::endl;
     std::cout << "Enter a number: ";
-    std::cin >> x;
+    std::cin >> UserChoice;
+    std::cout << std::endl;
     //User interface/interaction^^
-    if (isdigit(x) == true) {
-        switch (x)
+    if (isdigit(UserChoice) == true) {
+        switch (UserChoice)
         {
         case(1): {
             break;
@@ -35,36 +37,67 @@ int ideaCommittor() {
             break;
         }
         default: {
-            std::cout << "Sorry, your input was not recognized.2" << std::endl;
+            std::cout << "Sorry, your input was not recognized." << std::endl;
             break;
         }
         }
     }
     else {
-        std::cout << "Please put a number, not a string." << std::endl;
+        std::cout << "Please put a number, not a string." << std::endl;//No, I don't know why when you exit it does this.
     }
     //switch case^^
     return 0;
 }
 
 int ideaGenertor() {
+    repeated = false;//As they use the same variable, we need to reset it as this is a new function. 
+    int choice{};
+    std::cout << "Welcome to the ideaGenerator(tm)!\n What would you like to specify?" << std::endl;
+    std::cout << "1) Coding Language" << std::endl;
+    std::cout << "2) Difficulty" << std::endl;
+    std::cout << "3) Random Idea" << std::endl;
+    std::cout << "4) Exit" << std::endl;
+    std::cout << "Enter a number: ";
+    std::cin >> UserChoice;
+    std::cout << std::endl;
     //User interface/interaction^^
-    switch (x)
+    switch (UserChoice)
     {
-    case(1): {
-        break;
-    }
-    case(2): {
-        break;
-    }
-    case(3): {
-        std::cout << "Exiting..." << std::endl;
-        break;
-    }
-    default: {
-        std::cout << "Sorry, your input was not recognized.3" << std::endl;
-        break;
-    }
+        case(1): { //select a coding language
+            std::cin.ignore();
+            std::string language;
+            std::cout << "Select a language" << std::endl;
+            std::cout << "1) Python" << std::endl;
+            std::cout << "2) Html,CSS,JS" << std::endl;
+            std::cout << "3) p5 JS" << std::endl;
+            std::cout << "4) C++" << std::endl;
+            std::cout << "5) Other" << std::endl;
+            std::cin >> UserChoice;
+            break;
+        }
+        case(2): {// Selects the Difficulty
+            std::cin.ignore();
+            std::cout << "Select the Difficulty." << std::endl;
+            std::cout << "1" << std::endl;
+            std::cout << "2" << std::endl;
+            std::cout << "3" << std::endl;
+            std::cout << "4" << std::endl;
+            std::cout << "5" << std::endl;
+            std::cin >> UserChoice;
+            break;
+        }
+        case(3): {// Generate an Idea with no restrictions.
+            std::cout << "Sorry, This has not been made/or finsihed yet." << std::endl;
+            break;
+        }
+        case(4): {
+            std::cout << "Exiting..." << std::endl;
+            break;
+        }
+        default: {
+            std::cout << "Sorry, your input was not recognized." << std::endl;
+            break;
+        }
     }
     //switch case^^
     return 0;
@@ -73,7 +106,7 @@ int ideaGenertor() {
 int Menu() {
     
     //when things need to be run before the rest of the code ^^
-    if (repeted == false) {
+    if (repeated == false) {
         std::cout << "What would you like to do?" << std::endl;
         std::cout << "1) Edit Ideas" << std::endl;
         std::cout << "2) Generate Ideas" << std::endl;
@@ -81,28 +114,31 @@ int Menu() {
     }
     //no else statement as the rest of the code is shared anyways
     std::cout << "Enter a number: ";
-    std::cin >> x;
+    std::cin >> UserChoice;
+    std::cout << std::endl;
     //User interface/interaction^^
     if (std::cin.fail()) {
         std::cin.clear();
         std::cin.ignore();
         //Clears the input and ignores the characters.^^
         std::cout << "Please, enter an integer, not a character." << std::endl << std::endl;
-        repeted = false;
-        //Repeted as punishment for entering a character.
+        repeated = false;
+        //Repeated as punishment for entering a character.
         Menu();
         //Makes it like a while loop.
     }//If
     else
     {
-        switch (x)
+        switch (UserChoice)
         {
             case(1): {
                 ideaCommittor();
+                Menu();
                 break;
             }
             case(2): {
                 ideaGenertor();
+                Menu();
                 break;
             }
             case(3): {
@@ -111,7 +147,7 @@ int Menu() {
             }
             default: {
                 std::cout << "Sorry, your input was not recognized." << std::endl;
-                repeted = true;
+                repeated = true;
                 Menu();
                 break;
             }//default
@@ -123,14 +159,16 @@ int Menu() {
 
 int main()
 {
+    //test();
+    std::cout << "Welcome, To Max's glorious Project-o-Nator(tm)!" << std::endl;
     Menu();
     std::string txtTest{};
 
 
-
     //-----Variables^^-----
-    std::fstream Ideas("Ideas.txt");
-    Ideas << "Did this update?" << std::endl << "Did this update2?";
+    std::fstream Ideas("Ideas.txt", std::ios_base::app);
+    Ideas << std::endl << "Did this update?" << std::endl << "Did this update2?";
+    Ideas.close();
     //Update file ^^
     std::fstream ReadFile("Ideas.txt");
 
@@ -144,7 +182,6 @@ int main()
 
 
 }
-
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
 
